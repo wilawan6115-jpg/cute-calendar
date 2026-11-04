@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ปฏิทินบันทึกประจำวันสุดน่ารัก ✨</title>
+    <title>ปฏิทินบันทึกประจำวันสุดน่ารัก</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Kanit & Prompt -->
@@ -24,580 +24,472 @@
                             purple: '#E6E6FA',
                             peach: '#FFE5B4',
                             main: '#FF85A1',
-                            accent: '#FF6B8B'
+                            accent: '#FF688B'
                         }
                     },
                     fontFamily: {
-                        prompt: ['Prompt', 'sans-serif']
+                        sans: ['Prompt', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-
     <style>
         body {
-            font-family: 'Prompt', sans-serif;
-            background: linear-gradient(135deg, #FFF0F5 0%, #FFE5B4 50%, #E6E6FA 100%);
-            min-height: 100vh;
+            background-color: #FFF5F7;
+            background-image: radial-gradient(#FFD1DC 1px, transparent 1px);
+            background-size: 20px 20px;
         }
-
-        /* Glassmorphism Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 30px rgba(255, 133, 161, 0.15);
+        .calendar-card {
+            box-shadow: 0 10px 25px -5px rgba(255, 133, 161, 0.2), 0 8px 10px -6px rgba(255, 133, 161, 0.1);
         }
-
-        .calendar-day {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .calendar-day:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 15px rgba(255, 133, 161, 0.25);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
+        .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
-        ::-webkit-scrollbar-track {
+        .custom-scrollbar::-webkit-scrollbar-track {
             background: #FFF0F5;
             border-radius: 10px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #FF85A1;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #FFB6C1;
             border-radius: 10px;
-        }
-
-        /* Animations */
-        @keyframes popIn {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-pop {
-            animation: popIn 0.25s ease-out forwards;
         }
     </style>
 </head>
-<body class="p-3 md:p-6 text-gray-700 flex flex-col items-center justify-start">
+<body class="font-sans text-gray-700 min-h-screen pb-12">
 
-    <!-- Containerหลัก -->
-    <div class="w-full max-w-4xl">
-
-        <!-- Header ส่วนหัว -->
-        <header class="text-center mb-6 animate-pop">
-            <h1 class="text-3xl md:text-4xl font-bold text-pastel-accent tracking-wide flex items-center justify-center gap-2">
-                <span>✨</span> ปฏิทินบันทึกประจำวันสุดน่ารัก <span>💖</span>
+    <!-- Header Section -->
+    <header class="text-center py-8 px-4">
+        <div class="inline-block bg-white px-8 py-4 rounded-full shadow-md border-2 border-pastel-pink transform -rotate-1 transition hover:rotate-0">
+            <h1 class="text-2xl md:text-3xl font-bold text-pastel-accent flex items-center justify-center gap-2">
+                <span>✨</span> ปฏิทิน & ไดอารี่สุดน่ารัก <span>💖</span>
             </h1>
-            <p class="text-gray-600 text-sm md:text-base mt-1">จัดการงานส่วนตัว งานโรงเรียน และบันทึกอารมณ์สดใสในทุกๆ วัน</p>
-        </header>
+            <p class="text-xs md:text-sm text-gray-500 mt-1">บันทึกสิ่งที่ต้องทำ ไดอารี่ และความรู้สึกประจำวัน</p>
+        </div>
+    </header>
 
-        <!-- Main Card: ปฏิทิน -->
-        <main class="glass-card rounded-3xl p-4 md:p-7 animate-pop">
-
-            <!-- Controls: เดือน/ปี และปุ่มเปลี่ยนเดือน -->
-            <div class="flex items-center justify-between mb-6 bg-white/80 p-3 md:p-4 rounded-2xl shadow-sm border border-pink-100">
-                <button id="prev-month-btn" class="w-10 h-10 rounded-xl bg-pastel-lightpink text-pastel-accent hover:bg-pastel-main hover:text-white transition flex items-center justify-center text-lg font-bold shadow-sm active:scale-95">
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 calendar-card border-4 border-pastel-lightpink">
+            
+            <!-- Calendar Navigation -->
+            <div class="flex items-center justify-between mb-6 pb-4 border-b-2 border-dashed border-pastel-pink">
+                <button id="prev-month" class="p-2 md:px-4 md:py-2 bg-pastel-lightpink hover:bg-pastel-pink text-pastel-accent rounded-2xl transition flex items-center gap-1 font-medium">
                     <i class="fa-solid fa-chevron-left"></i>
+                    <span class="hidden md:inline">เดือนก่อนหน้า</span>
                 </button>
-
-                <div class="text-center">
-                    <h2 id="month-year-display" class="text-xl md:text-2xl font-bold text-gray-800">
-                        <!-- ตัวอย่าง: พฤศจิกายน 2569 -->
-                    </h2>
-                    <span id="today-indicator" class="inline-block mt-1 px-3 py-0.5 text-xs font-medium bg-pink-100 text-pink-600 rounded-full cursor-pointer hover:bg-pink-200 transition">
-                        📍 กลับสู่วันนี้
-                    </span>
-                </div>
-
-                <button id="next-month-btn" class="w-10 h-10 rounded-xl bg-pastel-lightpink text-pastel-accent hover:bg-pastel-main hover:text-white transition flex items-center justify-center text-lg font-bold shadow-sm active:scale-95">
+                
+                <h2 id="current-month-year" class="text-xl md:text-2xl font-bold text-gray-700"></h2>
+                
+                <button id="next-month" class="p-2 md:px-4 md:py-2 bg-pastel-lightpink hover:bg-pastel-pink text-pastel-accent rounded-2xl transition flex items-center gap-1 font-medium">
+                    <span class="hidden md:inline">เดือนถัดไป</span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
             </div>
 
-            <!-- วันในสัปดาห์ (อา - ส) -->
-            <div class="grid grid-cols-7 gap-1 md:gap-2 text-center font-semibold text-xs md:text-sm text-gray-500 mb-2">
-                <div class="py-1 text-red-400">อา</div>
-                <div class="py-1">จ</div>
-                <div class="py-1">อ</div>
-                <div class="py-1">พ</div>
-                <div class="py-1">พฤ</div>
-                <div class="py-1 text-sky-400">ศ</div>
-                <div class="py-1 text-purple-400">ส</div>
+            <!-- Days of Week Header -->
+            <div class="grid grid-cols-7 gap-1 md:gap-2 mb-2 text-center font-bold text-gray-500 text-sm md:text-base">
+                <div class="text-red-400 py-2">อา.</div>
+                <div class="py-2">จ.</div>
+                <div class="py-2">อ.</div>
+                <div class="py-2">พ.</div>
+                <div class="py-2">พฤ.</div>
+                <div class="py-2">ศ.</div>
+                <div class="text-blue-400 py-2">ส.</div>
             </div>
 
-            <!-- Grid ตารางวันที่ -->
-            <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5 md:gap-3">
-                <!-- ตารางวันจะถูกสร้างด้วย JS ที่นี่ -->
-            </div>
+            <!-- Calendar Days Grid -->
+            <div id="calendar-days" class="grid grid-cols-7 gap-1 md:gap-2 text-center"></div>
+        </div>
+    </main>
 
-            <!-- คำอธิบายสัญลักษณ์ด้านล่าง (Legend) -->
-            <div class="mt-6 pt-4 border-t border-pink-100 flex flex-wrap items-center justify-center gap-4 text-xs md:text-sm text-gray-600">
-                <div class="flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span>
-                    <span>งานส่วนตัว</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-sky-400 inline-block"></span>
-                    <span>งานโรงเรียน/อาชีพ</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="text-sm">💖</span>
-                    <span>บันทึกอารมณ์ (Mood)</span>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Pop-up Modal สำหรับบันทึกแต่ละวัน -->
-    <div id="day-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 md:p-4">
-        <div class="glass-card bg-white/95 rounded-3xl w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-pop border-2 border-pink-200">
+    <!-- Modal for Daily Log (Tasks + Mood + Diary + Photo) -->
+    <div id="task-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-hidden shadow-2xl border-4 border-pastel-pink flex flex-col transform transition-all scale-95 opacity-0 duration-200" id="modal-content">
             
             <!-- Modal Header -->
-            <div class="bg-gradient-to-r from-pink-100 via-purple-100 to-amber-100 p-4 md:p-5 flex items-center justify-between border-b border-pink-100">
+            <div class="bg-pastel-lightpink p-4 md:p-5 flex justify-between items-center border-b border-pastel-pink">
                 <div>
-                    <h3 id="modal-date-title" class="text-lg md:text-xl font-bold text-gray-800">
-                        <!-- แสดงวันที่เลือก -->
-                    </h3>
-                    <p class="text-xs text-gray-500 mt-0.5">บันทึกภารกิจและอารมณ์ประจำวันของคุณ</p>
+                    <h3 id="modal-date-title" class="text-lg md:text-xl font-bold text-pastel-accent"></h3>
+                    <p class="text-xs text-gray-500">บันทึกกิจกรรม ไดอารี่ และอารมณ์ของคุณ</p>
                 </div>
-                <button id="close-modal-btn" class="w-9 h-9 rounded-full bg-white/80 hover:bg-pink-200 text-gray-500 hover:text-pink-600 transition flex items-center justify-center text-lg">
+                <button id="close-modal" class="w-8 h-8 bg-white text-gray-400 hover:text-pastel-accent rounded-full flex items-center justify-center shadow transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Modal Content (Scrollable) -->
-            <div class="p-4 md:p-6 overflow-y-auto space-y-5">
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-4 md:p-6 overflow-y-auto custom-scrollbar flex-1 space-y-5">
                 
-                <!-- Section 1: Mood Tracker (เลือกอารมณ์) -->
-                <div class="bg-pink-50/60 p-3.5 rounded-2xl border border-pink-100">
-                    <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-2">
-                        🌈 อารมณ์ประจำวันนี้ของคุณเป็นอย่างไร?
+                <!-- Mood Tracker Section -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fa-solid fa-face-smile text-pastel-main mr-1"></i> ความรู้สึกวันนี้ (Mood)
                     </label>
-                    <div class="grid grid-cols-5 gap-2" id="mood-selector">
-                        <button data-mood="💖" title="มีความสุข" class="mood-btn p-2 text-2xl md:text-3xl rounded-xl bg-white hover:bg-pink-100 border border-pink-100 transition flex flex-col items-center gap-1">
-                            <span>💖</span>
-                            <span class="text-[10px] text-gray-600 font-normal">สุข</span>
-                        </button>
-                        <button data-mood="😊" title="อารมณ์ดี" class="mood-btn p-2 text-2xl md:text-3xl rounded-xl bg-white hover:bg-yellow-100 border border-yellow-100 transition flex flex-col items-center gap-1">
-                            <span>😊</span>
-                            <span class="text-[10px] text-gray-600 font-normal">แฮปปี้</span>
-                        </button>
-                        <button data-mood="😐" title="เฉยๆ" class="mood-btn p-2 text-2xl md:text-3xl rounded-xl bg-white hover:bg-gray-100 border border-gray-200 transition flex flex-col items-center gap-1">
-                            <span>😐</span>
-                            <span class="text-[10px] text-gray-600 font-normal">เฉยๆ</span>
-                        </button>
-                        <button data-mood="😢" title="เศร้า" class="mood-btn p-2 text-2xl md:text-3xl rounded-xl bg-white hover:bg-blue-100 border border-blue-100 transition flex flex-col items-center gap-1">
-                            <span>😢</span>
-                            <span class="text-[10px] text-gray-600 font-normal">เศร้า</span>
-                        </button>
-                        <button data-mood="😤" title="เหนื่อย/เครียด" class="mood-btn p-2 text-2xl md:text-3xl rounded-xl bg-white hover:bg-purple-100 border border-purple-100 transition flex flex-col items-center gap-1">
-                            <span>😤</span>
-                            <span class="text-[10px] text-gray-600 font-normal">เหนื่อย</span>
+                    <div class="flex justify-between bg-pastel-lightpink/50 p-2 rounded-2xl border border-pastel-pink/50" id="mood-selector">
+                        <button type="button" data-mood="happy" class="mood-btn flex-1 py-1.5 rounded-xl text-xl hover:bg-white transition text-center" title="มีความสุข">💖</button>
+                        <button type="button" data-mood="good" class="mood-btn flex-1 py-1.5 rounded-xl text-xl hover:bg-white transition text-center" title="อารมณ์ดี">😊</button>
+                        <button type="button" data-mood="neutral" class="mood-btn flex-1 py-1.5 rounded-xl text-xl hover:bg-white transition text-center" title="เฉยๆ">😐</button>
+                        <button type="button" data-mood="sad" class="mood-btn flex-1 py-1.5 rounded-xl text-xl hover:bg-white transition text-center" title="เศร้า">😢</button>
+                        <button type="button" data-mood="tired" class="mood-btn flex-1 py-1.5 rounded-xl text-xl hover:bg-white transition text-center" title="เหนื่อย/เครียด">😤</button>
+                    </div>
+                </div>
+
+                <!-- Diary Section -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fa-solid fa-book-open text-pastel-main mr-1"></i> ไดอารี่ประจำวัน (Diary)
+                    </label>
+                    <textarea id="diary-input" rows="3" placeholder="เขียนบันทึกเรื่องราวหรือเรื่องน่ารักๆ ของวันนี้..." class="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-pastel-main transition resize-none"></textarea>
+                </div>
+
+                <!-- Photo Upload Section -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fa-solid fa-image text-pastel-main mr-1"></i> รูปภาพความทรงจำ
+                    </label>
+                    <div class="space-y-2">
+                        <div id="photo-preview-container" class="relative hidden rounded-2xl overflow-hidden border-2 border-pastel-pink max-h-48 bg-gray-50 flex items-center justify-center">
+                            <img id="photo-preview" src="" alt="Daily photo" class="object-cover w-full h-full">
+                            <button id="remove-photo-btn" class="absolute top-2 right-2 bg-red-500/80 hover:bg-red-500 text-white w-7 h-7 rounded-full flex items-center justify-center transition shadow">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                        <input type="file" id="photo-input" accept="image/*" class="hidden">
+                        <button id="trigger-photo-btn" class="w-full py-2 px-3 border-2 border-dashed border-pastel-pink hover:bg-pastel-lightpink text-pastel-accent text-xs font-medium rounded-2xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-camera"></i>
+                            <span>อัปโหลดรูปภาพประจำวัน</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Section 2: แท็บเลือกหมวดงาน (Personal vs Work/School) -->
+                <!-- Task Category Tabs -->
                 <div>
-                    <!-- Tab Buttons -->
-                    <div class="flex bg-gray-100/80 p-1 rounded-2xl mb-3 text-xs md:text-sm font-semibold">
-                        <button id="tab-personal-btn" class="flex-1 py-2 rounded-xl transition flex items-center justify-center gap-2 bg-white text-pink-600 shadow-sm">
-                            <span>🏠</span> งานส่วนตัว
-                            <span id="personal-badge" class="px-1.5 py-0.5 rounded-full bg-pink-100 text-pink-600 text-[10px]">0</span>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fa-solid fa-list-check text-pastel-main mr-1"></i> สิ่งที่ต้องทำ (To-Do List)
+                    </label>
+                    <div class="flex bg-gray-100 p-1 rounded-2xl mb-3">
+                        <button id="tab-personal" class="flex-1 py-1.5 text-xs font-semibold rounded-xl transition text-pastel-accent bg-white shadow-sm">
+                            🏠 งานส่วนตัว
                         </button>
-                        <button id="tab-work-btn" class="flex-1 py-2 rounded-xl transition flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700">
-                            <span>🏫</span> งานโรงเรียน/อาชีพ
-                            <span id="work-badge" class="px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-600 text-[10px]">0</span>
+                        <button id="tab-work" class="flex-1 py-1.5 text-xs font-semibold rounded-xl transition text-gray-500 hover:text-gray-700">
+                            🏫 งานโรงเรียน/อาชีพ
                         </button>
                     </div>
 
-                    <!-- Input ช่องเพิ่มรายการ -->
+                    <!-- Task Input -->
                     <div class="flex gap-2 mb-3">
-                        <input type="text" id="todo-input" placeholder="พิมพ์รายการที่ต้องทำ..." class="flex-1 px-4 py-2.5 rounded-2xl border border-gray-200 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 text-sm transition">
-                        <button id="add-todo-btn" class="px-4 py-2.5 bg-pastel-main hover:bg-pastel-accent text-white font-semibold rounded-2xl text-sm transition shadow-sm active:scale-95 flex items-center gap-1">
+                        <input type="text" id="task-input" placeholder="เพิ่มรายการใหม่..." class="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-pastel-main transition">
+                        <button id="add-task-btn" class="px-4 py-2 bg-pastel-main hover:bg-pastel-accent text-white font-medium rounded-2xl transition text-sm flex items-center gap-1 shadow">
                             <i class="fa-solid fa-plus"></i> เพิ่ม
                         </button>
                     </div>
 
-                    <!-- รายการ Tasks (Personal Task List) -->
-                    <div id="personal-task-container" class="space-y-2 max-h-48 overflow-y-auto pr-1">
-                        <!-- รายการงานส่วนตัว -->
-                    </div>
-
-                    <!-- รายการ Tasks (Work Task List) -->
-                    <div id="work-task-container" class="space-y-2 max-h-48 overflow-y-auto pr-1 hidden">
-                        <!-- รายการงานโรงเรียน/อาชีพ -->
-                    </div>
+                    <!-- Task Lists -->
+                    <div id="personal-tasks-container" class="space-y-2 max-h-36 overflow-y-auto custom-scrollbar"></div>
+                    <div id="work-tasks-container" class="space-y-2 max-h-36 overflow-y-auto custom-scrollbar hidden"></div>
                 </div>
+
             </div>
 
             <!-- Modal Footer -->
-            <div class="p-3 bg-gray-50 border-t border-gray-100 text-center text-xs text-gray-400">
-                💡 บันทึกจะถูกจัดเก็บโดยอัตโนมัติในเครื่องของคุณ
+            <div class="bg-gray-50 p-3 px-6 border-t border-gray-100 text-right">
+                <button id="save-all-btn" class="px-6 py-2 bg-pastel-main hover:bg-pastel-accent text-white font-semibold rounded-2xl transition shadow">
+                    บันทึกทั้งหมด 💖
+                </button>
             </div>
+
         </div>
     </div>
 
     <!-- JavaScript Logic -->
     <script>
-        // --- State Management ---
-        let currentDate = new Date(); // วันปัจจุบันหรือวันที่กำลังเปิดดู
-        let selectedDateStr = "";     // รูปแบบ "YYYY-MM-DD"
-        let activeTab = "personal";   // "personal" หรือ "work"
-        
-        // โครงสร้างข้อมูล Data: { "YYYY-MM-DD": { mood: "💖", personal: [{id, text, done}], work: [{id, text, done}] } }
-        let appData = JSON.parse(localStorage.getItem("cute_calendar_data")) || {};
-
-        // รายชื่อเดือนภาษาไทย
-        const monthNamesTH = [
+        const monthNames = [
             "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
             "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
         ];
 
-        // --- Elements DOM ---
-        const monthYearDisplay = document.getElementById("month-year-display");
-        const calendarGrid = document.getElementById("calendar-days-grid");
-        const prevMonthBtn = document.getElementById("prev-month-btn");
-        const nextMonthBtn = document.getElementById("next-month-btn");
-        const todayIndicator = document.getElementById("today-indicator");
+        const moodEmojis = {
+            happy: "💖",
+            good: "😊",
+            neutral: "😐",
+            sad: "😢",
+            tired: "😤"
+        };
 
-        const dayModal = document.getElementById("day-modal");
-        const closeModalBtn = document.getElementById("close-modal-btn");
-        const modalDateTitle = document.getElementById("modal-date-title");
+        let currentDate = new Date();
+        let selectedDateKey = '';
+        let currentTab = 'personal'; 
+        let tempPhotoData = '';
+        
+        let appData = JSON.parse(localStorage.getItem('cute_calendar_app_data')) || {};
 
-        const tabPersonalBtn = document.getElementById("tab-personal-btn");
-        const tabWorkBtn = document.getElementById("tab-work-btn");
-        const personalBadge = document.getElementById("personal-badge");
-        const workBadge = document.getElementById("work-badge");
-        const todoInput = document.getElementById("todo-input");
-        const addTodoBtn = document.getElementById("add-todo-btn");
-        const personalContainer = document.getElementById("personal-task-container");
-        const workContainer = document.getElementById("work-task-container");
-        const moodBtns = document.querySelectorAll(".mood-btn");
-
-        // --- Functions การเรนเดอร์ปฏิทิน ---
-
-        function saveToLocalStorage() {
-            localStorage.setItem("cute_calendar_data", JSON.stringify(appData));
-        }
-
-        function formatDateKey(year, month, day) {
-            const m = String(month + 1).padStart(2, '0');
-            const d = String(day).padStart(2, '0');
-            return `${year}-${m}-${d}`;
-        }
+        const calendarDays = document.getElementById('calendar-days');
+        const currentMonthYear = document.getElementById('current-month-year');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        
+        const taskModal = document.getElementById('task-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModalBtn = document.getElementById('close-modal');
+        const modalDateTitle = document.getElementById('modal-date-title');
+        
+        const diaryInput = document.getElementById('diary-input');
+        const photoInput = document.getElementById('photo-input');
+        const photoPreview = document.getElementById('photo-preview');
+        const photoPreviewContainer = document.getElementById('photo-preview-container');
+        const triggerPhotoBtn = document.getElementById('trigger-photo-btn');
+        const removePhotoBtn = document.getElementById('remove-photo-btn');
+        
+        const taskInput = document.getElementById('task-input');
+        const addTaskBtn = document.getElementById('add-task-btn');
+        const personalTasksContainer = document.getElementById('personal-tasks-container');
+        const workTasksContainer = document.getElementById('work-tasks-container');
+        const tabPersonal = document.getElementById('tab-personal');
+        const tabWork = document.getElementById('tab-work');
+        const saveAllBtn = document.getElementById('save-all-btn');
 
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
 
-            // แสดงหัวข้อเดือนและปี พ.ศ.
-            monthYearDisplay.textContent = `${monthNamesTH[month]} ${year + 543}`;
+            currentMonthYear.textContent = `${monthNames[month]} ${year + 543}`;
+            calendarDays.innerHTML = '';
 
-            calendarGrid.innerHTML = "";
-
-            // หาวันแรกของเดือน และจำนวนวันในเดือนนั้น
-            const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = อาทิตย์
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
             const today = new Date();
-            const todayStr = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
 
-            // เว้นช่องว่างสำหรับวันก่อนหน้า
-            for (let i = 0; i < firstDayIndex; i++) {
-                const emptyCell = document.createElement("div");
-                emptyCell.className = "h-20 md:h-24 rounded-2xl bg-white/20";
-                calendarGrid.appendChild(emptyCell);
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'h-16 md:h-24 bg-transparent';
+                calendarDays.appendChild(emptyDiv);
             }
 
-            // เรนเดอร์วันแต่ละวัน
-            for (let day = 1; day <= totalDays; day++) {
-                const dateKey = formatDateKey(year, month, day);
-                const dayData = appData[dateKey] || { mood: "", personal: [], work: [] };
-                const isToday = (dateKey === todayStr);
+            for (let date = 1; date <= lastDate; date++) {
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                const dayData = appData[dateKey] || { personalTasks: [], workTasks: [], mood: '', diary: '', photo: '' };
+                
+                const isToday = today.getDate() === date && 
+                                today.getMonth() === month && 
+                                today.getFullYear() === year;
 
-                // นับจำนวนงานค้างที่ยังทำไม่เสร็จ
-                const pendingPersonal = (dayData.personal || []).filter(t => !t.done).length;
-                const pendingWork = (dayData.work || []).filter(t => !t.done).length;
-
-                const dayCard = document.createElement("div");
-                dayCard.className = `calendar-day h-20 md:h-24 p-1.5 md:p-2 rounded-2xl glass-card flex flex-col justify-between cursor-pointer border relative overflow-hidden ${
-                    isToday ? 'border-2 border-pink-400 bg-pink-50/70' : 'border-white/60 bg-white/70'
+                const daySquare = document.createElement('div');
+                daySquare.className = `h-16 md:h-24 p-1 rounded-2xl border transition cursor-pointer flex flex-col justify-between relative group ${
+                    isToday 
+                        ? 'bg-pastel-lightpink border-pastel-main shadow-inner font-bold' 
+                        : 'bg-white border-gray-100 hover:border-pastel-pink hover:bg-pastel-lightpink/30'
                 }`;
 
-                // ส่วนบน: ตัวเลขอันดับวัน + อารมณ์ (Mood Emoji)
-                const topRow = document.createElement("div");
-                topRow.className = "flex items-center justify-between w-full";
+                const hasPersonalUnfinished = dayData.personalTasks.some(t => !t.completed);
+                const hasWorkUnfinished = dayData.workTasks.some(t => !t.completed);
 
-                const dayNum = document.createElement("span");
-                dayNum.className = `text-xs md:text-sm font-bold w-6 h-6 flex items-center justify-center rounded-full ${
-                    isToday ? 'bg-pastel-main text-white' : 'text-gray-700'
-                }`;
-                dayNum.textContent = day;
+                daySquare.innerHTML = `
+                    <div class="flex justify-between items-center w-full px-1">
+                        <span class="text-xs md:text-sm ${isToday ? 'text-pastel-accent font-extrabold' : 'text-gray-700'}">${date}</span>
+                        <span class="text-xs md:text-sm">${dayData.mood ? moodEmojis[dayData.mood] : ''}</span>
+                    </div>
+                    
+                    <div class="flex-1 flex flex-col justify-center items-center gap-0.5 my-1">
+                        ${dayData.photo ? '<span class="text-xs text-pastel-main"><i class="fa-solid fa-image"></i></span>' : ''}
+                        ${dayData.diary ? '<span class="text-[10px] text-gray-400 max-w-full truncate px-1">📝</span>' : ''}
+                    </div>
 
-                const moodSpan = document.createElement("span");
-                moodSpan.className = "text-sm md:text-base";
-                moodSpan.textContent = dayData.mood || "";
+                    <div class="flex justify-center gap-1 w-full pb-0.5">
+                        ${hasPersonalUnfinished ? '<span class="w-1.5 h-1.5 rounded-full bg-pastel-main" title="งานส่วนตัว"></span>' : ''}
+                        ${hasWorkUnfinished ? '<span class="w-1.5 h-1.5 rounded-full bg-blue-400" title="งานโรงเรียน"></span>' : ''}
+                    </div>
+                `;
 
-                topRow.appendChild(dayNum);
-                topRow.appendChild(moodSpan);
-                dayCard.appendChild(topRow);
-
-                // ส่วนล่าง: แสดงสัญลักษณ์งานส่วนตัว/งานโรงเรียน
-                const bottomRow = document.createElement("div");
-                bottomRow.className = "flex flex-col gap-1 w-full mt-auto";
-
-                if (pendingPersonal > 0 || pendingWork > 0) {
-                    const badgeContainer = document.createElement("div");
-                    badgeContainer.className = "flex items-center gap-1 flex-wrap";
-
-                    if (pendingPersonal > 0) {
-                        const pBadge = document.createElement("span");
-                        pBadge.className = "w-2 h-2 rounded-full bg-pink-400 inline-block";
-                        pBadge.title = `งานส่วนตัวค้าง ${pendingPersonal} รายการ`;
-                        badgeContainer.appendChild(pBadge);
-                    }
-                    if (pendingWork > 0) {
-                        const wBadge = document.createElement("span");
-                        wBadge.className = "w-2 h-2 rounded-full bg-sky-400 inline-block";
-                        wBadge.title = `งานโรงเรียนค้าง ${pendingWork} รายการ`;
-                        badgeContainer.appendChild(wBadge);
-                    }
-                    bottomRow.appendChild(badgeContainer);
-                }
-
-                // สรุปข้อความรายการแบบย่อ
-                const totalTasks = (dayData.personal || []).length + (dayData.work || []).length;
-                if (totalTasks > 0) {
-                    const taskSummary = document.createElement("span");
-                    taskSummary.className = "text-[9px] md:text-[11px] text-gray-500 font-medium truncate";
-                    const completedTasks = [...(dayData.personal || []), ...(dayData.work || [])].filter(t => t.done).length;
-                    taskSummary.textContent = `📝 ${completedTasks}/${totalTasks}`;
-                    bottomRow.appendChild(taskSummary);
-                }
-
-                dayCard.appendChild(bottomRow);
-
-                // Event คลิกเปิด Pop-up
-                dayCard.addEventListener("click", () => openDayModal(dateKey, day, month, year));
-
-                calendarGrid.appendChild(dayCard);
+                daySquare.addEventListener('click', () => openModal(dateKey, date, month, year));
+                calendarDays.appendChild(daySquare);
             }
         }
 
-        // --- Functions การจัดการ Pop-up (Modal) ---
-
-        function openDayModal(dateKey, day, month, year) {
-            selectedDateStr = dateKey;
+        function openModal(dateKey, date, month, year) {
+            selectedDateKey = dateKey;
+            modalDateTitle.textContent = `วันที่ ${date} ${monthNames[month]} ${year + 543}`;
             
-            // ตั้งชื่อหัวข้อ Modal
-            modalDateTitle.textContent = `วันที่ ${day} ${monthNamesTH[month]} ${year + 543}`;
-
-            // โหลดข้อมูลประจำวัน
-            if (!appData[selectedDateStr]) {
-                appData[selectedDateStr] = { mood: "", personal: [], work: [] };
+            if (!appData[selectedDateKey]) {
+                appData[selectedDateKey] = { personalTasks: [], workTasks: [], mood: '', diary: '', photo: '' };
             }
 
-            updateMoodUI();
-            updateTasksUI();
+            const dayData = appData[selectedDateKey];
 
-            // เปิด Pop-up Modal
-            dayModal.classList.remove("hidden");
+            // Set Mood
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                if (btn.dataset.mood === dayData.mood) {
+                    btn.classList.add('bg-white', 'shadow-sm', 'scale-110');
+                } else {
+                    btn.classList.remove('bg-white', 'shadow-sm', 'scale-110');
+                }
+            });
+
+            // Set Diary
+            diaryInput.value = dayData.diary || '';
+
+            // Set Photo
+            tempPhotoData = dayData.photo || '';
+            if (tempPhotoData) {
+                photoPreview.src = tempPhotoData;
+                photoPreviewContainer.classList.remove('hidden');
+            } else {
+                photoPreviewContainer.classList.add('hidden');
+            }
+
+            switchTab('personal');
+            renderTasks();
+
+            taskModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
         }
 
         function closeModal() {
-            dayModal.classList.add("hidden");
-            renderCalendar(); // อัปเดตตารางปฏิทินเมื่อปิด Modal
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                taskModal.classList.add('hidden');
+            }, 200);
         }
 
-        // อัปเดตสถานะปุ่มอารมณ์ (Mood Tracker)
-        function updateMoodUI() {
-            const currentMood = appData[selectedDateStr]?.mood || "";
-            moodBtns.forEach(btn => {
-                if (btn.dataset.mood === currentMood) {
-                    btn.classList.add("ring-2", "ring-pink-400", "scale-105", "bg-pink-100");
+        // Photo Upload Handling
+        triggerPhotoBtn.addEventListener('click', () => photoInput.click());
+
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    tempPhotoData = event.target.result;
+                    photoPreview.src = tempPhotoData;
+                    photoPreviewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removePhotoBtn.addEventListener('click', () => {
+            tempPhotoData = '';
+            photoPreview.src = '';
+            photoPreviewContainer.classList.add('hidden');
+            photoInput.value = '';
+        });
+
+        // Mood Selection
+        document.getElementById('mood-selector').addEventListener('click', (e) => {
+            const btn = e.target.closest('.mood-btn');
+            if (!btn) return;
+            
+            const selectedMood = btn.dataset.mood;
+            appData[selectedDateKey].mood = appData[selectedDateKey].mood === selectedMood ? '' : selectedMood;
+            
+            document.querySelectorAll('.mood-btn').forEach(b => {
+                if (b.dataset.mood === appData[selectedDateKey].mood) {
+                    b.classList.add('bg-white', 'shadow-sm', 'scale-110');
                 } else {
-                    btn.classList.remove("ring-2", "ring-pink-400", "scale-105", "bg-pink-100");
+                    b.classList.remove('bg-white', 'shadow-sm', 'scale-110');
                 }
             });
-        }
+        });
 
-        // อัปเดตรายการ Tasks ทั้ง 2 หมวด
-        function updateTasksUI() {
-            const dayData = appData[selectedDateStr] || { personal: [], work: [] };
-            const personalList = dayData.personal || [];
-            const workList = dayData.work || [];
-
-            // อัปเดตตัวเลข Badge บนแท็บ
-            personalBadge.textContent = personalList.length;
-            workBadge.textContent = workList.length;
-
-            // เรนเดอร์รายการงานส่วนตัว
-            renderTaskList(personalList, personalContainer, "personal");
-
-            // เรนเดอร์รายการงานโรงเรียน/อาชีพ
-            renderTaskList(workList, workContainer, "work");
-        }
-
-        function renderTaskList(list, container, category) {
-            container.innerHTML = "";
-            if (list.length === 0) {
-                container.innerHTML = `<div class="text-center py-4 text-xs text-gray-400">ยังไม่มีรายการ${category === 'personal' ? 'งานส่วนตัว' : 'งานโรงเรียน'}</div>`;
-                return;
+        // Tab Switching
+        function switchTab(tab) {
+            currentTab = tab;
+            if (tab === 'personal') {
+                tabPersonal.className = 'flex-1 py-1.5 text-xs font-semibold rounded-xl transition text-pastel-accent bg-white shadow-sm';
+                tabWork.className = 'flex-1 py-1.5 text-xs font-semibold rounded-xl transition text-gray-500 hover:text-gray-700';
+                personalTasksContainer.classList.remove('hidden');
+                workTasksContainer.classList.add('hidden');
+            } else {
+                tabWork.className = 'flex-1 py-1.5 text-xs font-semibold rounded-xl transition text-blue-500 bg-white shadow-sm';
+                tabPersonal.className = 'flex-1 py-1.5 text-xs font-semibold rounded-xl transition text-gray-500 hover:text-gray-700';
+                workTasksContainer.classList.remove('hidden');
+                personalTasksContainer.classList.add('hidden');
             }
+        }
 
-            list.forEach(task => {
-                const item = document.createElement("div");
-                item.className = "flex items-center justify-between p-2.5 bg-white rounded-xl border border-gray-100 shadow-sm transition hover:border-pink-200";
+        tabPersonal.addEventListener('click', () => switchTab('personal'));
+        tabWork.addEventListener('click', () => switchTab('work'));
 
-                const leftSection = document.createElement("div");
-                leftSection.className = "flex items-center gap-2 flex-1 cursor-pointer";
-                
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.checked = task.done;
-                checkbox.className = "w-4 h-4 rounded text-pink-500 focus:ring-pink-400 cursor-pointer";
-                checkbox.addEventListener("change", () => toggleTaskDone(task.id, category));
+        // Task Functions
+        function renderTasks() {
+            const dayData = appData[selectedDateKey];
+            
+            // Personal
+            personalTasksContainer.innerHTML = '';
+            dayData.personalTasks.forEach((task, index) => {
+                personalTasksContainer.appendChild(createTaskElement(task, index, 'personalTasks'));
+            });
 
-                const textSpan = document.createElement("span");
-                textSpan.className = `text-xs md:text-sm ${task.done ? 'line-through text-gray-400' : 'text-gray-700'}`;
-                textSpan.textContent = task.text;
-
-                leftSection.appendChild(checkbox);
-                leftSection.appendChild(textSpan);
-
-                const deleteBtn = document.createElement("button");
-                deleteBtn.className = "text-gray-300 hover:text-red-400 p-1 text-xs transition";
-                deleteBtn.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
-                deleteBtn.addEventListener("click", () => deleteTask(task.id, category));
-
-                item.appendChild(leftSection);
-                item.appendChild(deleteBtn);
-                container.appendChild(item);
+            // Work
+            workTasksContainer.innerHTML = '';
+            dayData.workTasks.forEach((task, index) => {
+                workTasksContainer.appendChild(createTaskElement(task, index, 'workTasks'));
             });
         }
 
-        // --- Task Handlers ---
+        function createTaskElement(task, index, type) {
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-2 rounded-xl bg-gray-50 border border-gray-100 text-xs';
+            div.innerHTML = `
+                <div class="flex items-center gap-2 flex-1">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} class="w-4 h-4 accent-pastel-main rounded cursor-pointer">
+                    <span class="${task.completed ? 'line-through text-gray-400' : 'text-gray-700'}">${task.text}</span>
+                </div>
+                <button class="text-gray-300 hover:text-red-400 transition p-1">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            `;
 
-        function addTask() {
-            const text = todoInput.value.trim();
-            if (!text || !selectedDateStr) return;
+            div.querySelector('input').addEventListener('change', () => {
+                appData[selectedDateKey][type][index].completed = !appData[selectedDateKey][type][index].completed;
+                renderTasks();
+            });
 
-            if (!appData[selectedDateStr]) {
-                appData[selectedDateStr] = { mood: "", personal: [], work: [] };
-            }
+            div.querySelector('button').addEventListener('click', () => {
+                appData[selectedDateKey][type].splice(index, 1);
+                renderTasks();
+            });
 
-            const newTask = {
-                id: Date.now(),
-                text: text,
-                done: false
-            };
-
-            if (activeTab === "personal") {
-                if (!appData[selectedDateStr].personal) appData[selectedDateStr].personal = [];
-                appData[selectedDateStr].personal.push(newTask);
-            } else {
-                if (!appData[selectedDateStr].work) appData[selectedDateStr].work = [];
-                appData[selectedDateStr].work.push(newTask);
-            }
-
-            saveToLocalStorage();
-            todoInput.value = "";
-            updateTasksUI();
+            return div;
         }
 
-        function toggleTaskDone(taskId, category) {
-            const list = appData[selectedDateStr][category];
-            const task = list.find(t => t.id === taskId);
-            if (task) {
-                task.done = !task.done;
-                saveToLocalStorage();
-                updateTasksUI();
-            }
-        }
+        addTaskBtn.addEventListener('click', () => {
+            const text = taskInput.value.trim();
+            if (!text) return;
+            const type = currentTab === 'personal' ? 'personalTasks' : 'workTasks';
+            appData[selectedDateKey][type].push({ text, completed: false });
+            taskInput.value = '';
+            renderTasks();
+        });
 
-        function deleteTask(taskId, category) {
-            appData[selectedDateStr][category] = appData[selectedDateStr][category].filter(t => t.id !== taskId);
-            saveToLocalStorage();
-            updateTasksUI();
-        }
+        // Save All
+        saveAllBtn.addEventListener('click', () => {
+            appData[selectedDateKey].diary = diaryInput.value.trim();
+            appData[selectedDateKey].photo = tempPhotoData;
+            localStorage.setItem('cute_calendar_app_data', JSON.stringify(appData));
+            closeModal();
+            renderCalendar();
+        });
 
-        // --- Event Listeners ---
-
-        // ปุ่มเปลี่ยนเดือน
-        prevMonthBtn.addEventListener("click", () => {
+        // Navigation
+        prevMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
             renderCalendar();
         });
 
-        nextMonthBtn.addEventListener("click", () => {
+        nextMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
             renderCalendar();
         });
 
-        todayIndicator.addEventListener("click", () => {
-            currentDate = new Date();
-            renderCalendar();
-        });
+        closeModalBtn.addEventListener('click', closeModal);
 
-        // ปิด Modal
-        closeModalBtn.addEventListener("click", closeModal);
-        dayModal.addEventListener("click", (e) => {
-            if (e.target === dayModal) closeModal();
-        });
-
-        // สลับแท็บ หมวดงาน
-        tabPersonalBtn.addEventListener("click", () => {
-            activeTab = "personal";
-            tabPersonalBtn.className = "flex-1 py-2 rounded-xl transition flex items-center justify-center gap-2 bg-white text-pink-600 shadow-sm";
-            tabWorkBtn.className = "flex-1 py-2 rounded-xl transition flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700";
-            personalContainer.classList.remove("hidden");
-            workContainer.classList.add("hidden");
-        });
-
-        tabWorkBtn.addEventListener("click", () => {
-            activeTab = "work";
-            tabWorkBtn.className = "flex-1 py-2 rounded-xl transition flex items-center justify-center gap-2 bg-white text-sky-600 shadow-sm";
-            tabPersonalBtn.className = "flex-1 py-2 rounded-xl transition flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700";
-            workContainer.classList.remove("hidden");
-            personalContainer.classList.add("hidden");
-        });
-
-        // เพิ่มรายการงาน (ปุ่มคลิก + กด Enter)
-        addTodoBtn.addEventListener("click", addTask);
-        todoInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") addTask();
-        });
-
-        // เลือก Mood อารมณ์
-        moodBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                const selectedMood = btn.dataset.mood;
-                if (!appData[selectedDateStr]) {
-                    appData[selectedDateStr] = { mood: "", personal: [], work: [] };
-                }
-                
-                // ถ้านกดเลือกอันเดิมซ้ำ ให้ยกเลิก
-                if (appData[selectedDateStr].mood === selectedMood) {
-                    appData[selectedDateStr].mood = "";
-                } else {
-                    appData[selectedDateStr].mood = selectedMood;
-                }
-
-                saveToLocalStorage();
-                updateMoodUI();
-            });
-        });
-
-        // --- Initial Load ---
-        window.onload = function() {
-            renderCalendar();
-        };
+        // Initial Render
+        renderCalendar();
     </script>
 </body>
 </html>
